@@ -11,10 +11,15 @@ exports.login = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+  if (!req.body.email || !req.body.password) return res.status(400).json({ msg: "Missing login data" });
+  const {password}= req.body;
   const email = req.body.email.toLowerCase();
   try {
     let userInDb = await User.findOne({ email: email });
     if (!userInDb) return res.status(400).json({ msg: "Email is not valid" });
+    const checkPassword = bcryptjs.compareSync(password, userInDb.password);
+    if (!checkPassword)
+        return res.status(400).json({ msg: "Email or password not valid" });
     sendCookie(res, userInDb);
   } catch (error) {
     res
