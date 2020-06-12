@@ -5,8 +5,8 @@ module.exports = () => {
     role: {
       in: "body",
       matches: {
-        options: [/\b(?:admin|user)\b/],
-        errorMessage: 'Invalid role: only "user" and "admin" roles allowed',
+        options: [/\b(?:admin|users)\b/],
+        errorMessage: 'Invalid role: only "users" and "admin" roles allowed',
       },
     },
   };

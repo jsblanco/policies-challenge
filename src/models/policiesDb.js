@@ -21,6 +21,15 @@ class Policies {
   getPolicyList() {
     return this.policies;
   }
+
+  getUserPolicies(clientId){
+    return this.policies.filter(policy=> policy.clientId===clientId)
+  }
+
+  getPolicy(policyId){
+    return this.policies.find(policy=> policy.id===policyId)
+  }
+
 }
 
 module.exports = new Policies();

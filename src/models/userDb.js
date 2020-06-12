@@ -8,7 +8,7 @@ const defaultConfig = {
 const userSchema = mongoose.Schema({
     username: { ...defaultConfig, unique: true },
     email: { ...defaultConfig, unique: true },
-    role: { ...defaultConfig, enum: ["user", "admin"] },
+    role: { ...defaultConfig, enum: ["users", "admin"] },
     password: defaultConfig,
 }, {
     timestamps: true
