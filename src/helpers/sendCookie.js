@@ -11,5 +11,5 @@ module.exports = (res, payloadInfo) => {
         maxAge: process.env.COOKIEMAXAGE,
         httpOnly: true,
         secure: false
-    }).json({msg: `Cookie sent for user ${payloadInfo.name}`});
+    }).json({msg: `Cookie sent for user ${payloadInfo.username}`});
 };

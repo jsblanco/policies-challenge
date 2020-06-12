@@ -11,20 +11,20 @@ exports.signup = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { name, password, role } = req.body;
+  const { username, password, role } = req.body;
   const email = req.body.email.toLowerCase();
   try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: `Email ${email} is already in the database` });
     }
-    user = await User.findOne({ name });
+    user = await User.findOne({ username });
     if (user) {
       return res
         .status(400)
-        .json({ msg: `Client name ${name} is already in the database` });
+        .json({ msg: `Client username ${username} is already in the database` });
     }
-    user = { name, email, password, role };
+    user = { username, email, password, role };
     user.password = bcryptjs.hashSync(password, 10);
     const createdUser = await User.collection.insertOne({
       ...user,
