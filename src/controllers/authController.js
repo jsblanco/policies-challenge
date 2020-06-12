@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Clients = require("../models/clients");
+const Clients = require("../models/clientsDb");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const sendCookie = require("./../helpers/sendCookie");
@@ -12,15 +12,11 @@ exports.login = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { password } = req.body;
   const email = req.body.email.toLowerCase();
   try {
-    let userInDb = await Clients.findOne({ email });
+    let userInDb = await Clients.getByEmail(email);
     if (!userInDb)
-      return res.status(400).json({ msg: "Email or password are not valid" });
-    const checkPassword = bcryptjs.compareSync(password, userInDb.password);
-    if (!checkPassword)
-      return res.status(400).json({ msg: "Email or password are not valid" });
+      return res.status(400).json({ msg: "Email is not valid" });
     sendCookie(res, userInDb);
   } catch (e) {
     res.status(400).send("An unspecified error ocurred");
@@ -33,7 +29,7 @@ exports.me = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const user = await Clients.findOne({ email: req.body.token.email }).select(
+    const user = await Clients.getByEmail(req.body.token.email).select(
       "-password"
     );
     sendCookie(res, {
