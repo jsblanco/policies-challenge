@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const User = require("./../models/user");
+const Clients = require("./../models/clients");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const sendCookie = require("./../helpers/sendCookie");
@@ -11,27 +11,27 @@ exports.signup = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { username, password } = req.body;
+  const { name, password } = req.body;
   const email = req.body.email.toLowerCase();
   try {
-    let user = await User.findOne({ email });
+    let user = await Clients.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: `Email ${email} is already in the database` });
     }
-    user = await User.findOne({ username });
+    user = await Clients.findOne({ name });
     if (user) {
       return res
         .status(400)
-        .json({ msg: `Username ${username} is already in the database` });
+        .json({ msg: `Clientsname ${name} is already in the database` });
     }
-    user = { username, email, password };
+    user = { name, email, password };
     user.password = bcryptjs.hashSync(password, 10);
-    const createdUser = await User.collection.insertOne({
+    const createdClients = await Clients.collection.insertOne({
       ...user,
       created_at: Date.now(),
       updated_at: Date.now(),
     });
-    sendCookie(res, createdUser.ops[0]);
+    sendCookie(res, createdClients.ops[0]);
   } catch (e) {
     res.status(400).send("An error ocurred");
   }
