@@ -13,10 +13,10 @@ exports.policiesByUsername = async (req, res) => {
     const policies = await Policies.getUserPolicies(client.id);
     !!policies
       ? res.status(200).json(policies)
-      : res.status(400).json({ msg: "This user has no policies to his name" });
+      : res.status(404).json({ msg: "This user has no policies to his name" });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
@@ -28,18 +28,18 @@ exports.getPolicyOwner = async (req, res) => {
   try {
     const policy = await Policies.getPolicy(policyId);
     if (!policy)
-      return res.status(400).json({
+      return res.status(404).json({
         msg: "No such policy in database, please check the provided ID",
       });
     const client = await Clients.getById(policy.clientId);
     !!client
       ? res.status(200).json(client)
       : res
-          .status(400)
+          .status(404)
           .json({ msg: "Could not find the client linked to this policy" });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };

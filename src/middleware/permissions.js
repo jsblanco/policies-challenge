@@ -1,5 +1,6 @@
 module.exports.usersAndAdmin = (req, res, next) => {
   try {
+    if (!req.body.token) return  res.status(401).json({ msg: "Please log in before trying to access this information" });
     req.body.token.role === "users" || req.body.token.role === "admin"
       ? next()
       : res.status(403).json({
@@ -16,6 +17,7 @@ module.exports.usersAndAdmin = (req, res, next) => {
 
 module.exports.adminOnly = (req, res, next) => {
   try {
+    if (!req.body.token) return  res.status(401).json({ msg: "Please log in before trying to access this information"});
     req.body.token.role === "admin"
       ? next()
       : res.status(403).json({

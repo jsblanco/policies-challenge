@@ -1,5 +1,5 @@
 const app = require("../src/app");
-const { user, badUserData } = require("./testUsers");
+const { authUser, badUserData } = require("./testUsers");
 const supertest = require("supertest");
 const request = supertest(app);
 
@@ -12,7 +12,7 @@ describe("Authentification routes test", () => {
       expect(response.statusCode).toBe(400);
     });
     it("Signup with correct information", async () => {
-      const response = await request.post("/api/signup").send(user);
+      const response = await request.post("/api/signup").send(authUser);
       cookie = response.header["set-cookie"];
       expect(response.statusCode).toBe(200);
     });
@@ -44,35 +44,35 @@ describe("Authentification routes test", () => {
       const res = await request
         .put("/api/auth")
         .set("Cookie", cookie)
-        .send({ ...user, originalPassword: "originalPassword" });
+        .send({ ...authUser, originalPassword: "originalPassword" });
       expect(res.statusCode).toBe(400);
     });
     it("User edit with right information", async () => {
       const res = await request
         .put("/api/auth")
         .set("Cookie", cookie)
-        .send({ ...user, username: "NewUsername" });
+        .send({ ...authUser, username: "NewUsername" });
       expect(res.statusCode).toBe(200);
     });
   });
 
   describe("Testing user deletion route", () => {
     it("Delete route without user cookie", async () => {
-      const res = await request.delete("/api/auth").send(user);
+      const res = await request.delete("/api/auth").send(authUser);
       expect(res.statusCode).toBe(401);
     });
     it("Delete route sending wrong information", async () => {
       const res = await request
         .delete("/api/auth")
         .set("Cookie", cookie)
-        .send(user.email);
+        .send(authUser.email);
       expect(res.statusCode).toBe(400);
     });
     it("Delete user success", async () => {
       const res = await request
         .delete("/api/auth")
         .set("Cookie", cookie)
-        .send(user);
+        .send(authUser);
       expect(res.statusCode).toBe(200);
     });
   });

@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
     sendCookie(res, userInDb);
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
@@ -45,7 +45,7 @@ exports.me = async (req, res) => {
     });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
@@ -56,7 +56,7 @@ exports.logout = async (req, res) => {
     res.status(200).json({ msg: "User logged out sucesfully" });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
@@ -97,7 +97,7 @@ exports.edit = async (req, res) => {
     sendCookie(res, { _id: id, username, email });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
@@ -121,7 +121,7 @@ exports.delete = async (req, res) => {
     res.json({ msg: `Deleted the specified user` });
   } catch (error) {
     res
-      .status(401)
+      .status(500)
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
