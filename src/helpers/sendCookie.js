@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const signToken = require("./signToken");
 require("dotenv").config();
-let appName = "App-";
-appName += process.env.APPNAME;
+let appName = "App-"+process.env.APPNAME;
 
 
 module.exports = (res, payloadInfo) => {

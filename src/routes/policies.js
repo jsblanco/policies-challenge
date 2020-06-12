@@ -5,7 +5,6 @@ const router = express.Router();
 const policyController = require("./../controllers/policyController");
 const auth = require("./../middleware/auth");
 const permissions = require("../middleware/permissions");
-const checkError = require("./../helpers/checkUser");
 router.post("/get-by-name", auth, permissions.adminOnly,  policyController.policiesByUsername);
 router.post("/get-client-info", auth, permissions.adminOnly,  policyController.getPolicyOwner);
 module.exports = router;

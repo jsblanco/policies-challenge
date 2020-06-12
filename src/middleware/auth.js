@@ -6,7 +6,9 @@ module.exports = (req, res, next) => {
   let appName = "App-" + process.env.APPNAME;
   const token = req.cookies[appName];
   if (!req.cookies[appName]) {
-    return res.status(401).json({ msg: "Please log in before trying to access this information" });
+    return res
+      .status(401)
+      .json({ msg: "Please log in before trying to access this information" });
   }
   try {
     const signature = jwt.verify(token, process.env.SECRETKEY);

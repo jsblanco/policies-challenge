@@ -4,8 +4,7 @@ const User = require("../models/userDb");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const sendCookie = require("./../helpers/sendCookie");
-let appName = "App-";
-appName += process.env.APPNAME;
+let appName = "App-"+process.env.APPNAME;
 
 exports.login = async (req, res) => {
   const errors = validationResult(req);
@@ -13,15 +12,14 @@ exports.login = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const email = req.body.email.toLowerCase();
-  console.log("hola");
   try {
     let userInDb = await User.findOne({ email: email });
     if (!userInDb) return res.status(400).json({ msg: "Email is not valid" });
     sendCookie(res, userInDb);
   } catch (error) {
     res
-    .status(401)
-    .json({ msg: "Server error- please contact your administrator", error });
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -63,7 +61,7 @@ exports.edit = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
   let { originalPassword } = req.body;
   const { id } = req.body.token;
   try {
@@ -87,11 +85,11 @@ exports.edit = async (req, res) => {
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
     await User.findByIdAndUpdate(id, {
-      name,
+      username,
       email,
       password: hashedPassword,
     });
-    sendCookie(res, { _id: id, name, email });
+    sendCookie(res, { _id: id, username, email });
   } catch (error) {
     res
       .status(401)

@@ -12,12 +12,10 @@ class Clients {
         "http://www.mocky.io/v2/5808862710000087232b75ac"
       );
       this.clients = this.clients.concat(clientJSON.clients);
-      console.log("Client DB populated with mock JSON data");
     } catch (e) {
       console.log(e);
     }
   };
-
 
   getByName(name) {
     return this.clients.find(

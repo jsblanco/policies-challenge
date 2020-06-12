@@ -12,7 +12,6 @@ class Policies {
         "http://www.mocky.io/v2/580891a4100000e8242b75c5"
       );
       this.policies = this.policies.concat(policyJSON.policies);
-      console.log("Policies DB populated with mock JSON data");
     } catch (e) {
       console.log(e);
     }
@@ -22,14 +21,13 @@ class Policies {
     return this.policies;
   }
 
-  getUserPolicies(clientId){
-    return this.policies.filter(policy=> policy.clientId===clientId)
+  getUserPolicies(clientId) {
+    return this.policies.filter((policy) => policy.clientId === clientId);
   }
 
-  getPolicy(policyId){
-    return this.policies.find(policy=> policy.id===policyId)
+  getPolicy(policyId) {
+    return this.policies.find((policy) => policy.id === policyId);
   }
-
 }
 
 module.exports = new Policies();

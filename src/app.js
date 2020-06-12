@@ -6,8 +6,6 @@ const cors = require("cors");
 const cookieparser = require("cookie-parser");
 const db_config_1 = require("./config/db.config");
 const app = express();
-const Clients = require("./models/clientsDb");
-const Policies = require("./models/policiesDb");
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

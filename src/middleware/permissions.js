@@ -7,9 +7,9 @@ module.exports.usersAndAdmin = (req, res, next) => {
             "Your account does not have permission to access this information.",
         });
   } catch (error) {
-    console.log(error);
     res.status(401).json({
       msg: "Please log in before trying to access this information.",
+      error,
     });
   }
 };
@@ -23,9 +23,9 @@ module.exports.adminOnly = (req, res, next) => {
             "Your account does not have permission to access this information.",
         });
   } catch (error) {
-    console.log(error);
     res.status(401).json({
       msg: "Please log in before trying to access this information.",
+      error,
     });
   }
 };

@@ -2,10 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Clients = require("../models/clientsDb");
 const Policies = require("../models/policiesDb");
-let appName = "App-";
-appName += process.env.APPNAME;
-
-//- Get the user linked to a policy number -> Can be accessed by users with role "admin"
 
 exports.policiesByUsername = async (req, res) => {
   const name = req.body.name.trim();
@@ -47,6 +43,3 @@ exports.getPolicyOwner = async (req, res) => {
       .json({ msg: "Server error- please contact your administrator", error });
   }
 };
-
-// const policies = await Policies.getPolicyList()
-// return res.status(200).json(policies)

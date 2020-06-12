@@ -1,16 +1,19 @@
 "use strict";
 const mongoose = require("mongoose");
 const defaultConfig = {
-    type: String,
-    required: true,
-    trim: true
+  type: String,
+  required: true,
+  trim: true,
 };
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema(
+  {
     username: { ...defaultConfig, unique: true },
     email: { ...defaultConfig, unique: true },
     role: { ...defaultConfig, enum: ["users", "admin"] },
     password: defaultConfig,
-}, {
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 module.exports = mongoose.model("User", userSchema);

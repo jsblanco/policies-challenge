@@ -5,7 +5,6 @@ const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const sendCookie = require("./../helpers/sendCookie");
 
-
 exports.signup = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -16,13 +15,17 @@ exports.signup = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: `Email ${email} is already in the database` });
+      return res
+        .status(400)
+        .json({ msg: `Email ${email} is already in the database` });
     }
     user = await User.findOne({ username });
     if (user) {
       return res
         .status(400)
-        .json({ msg: `Client username ${username} is already in the database` });
+        .json({
+          msg: `Client username ${username} is already in the database`,
+        });
     }
     user = { username, email, password, role };
     user.password = bcryptjs.hashSync(password, 10);
