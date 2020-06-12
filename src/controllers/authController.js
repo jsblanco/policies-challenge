@@ -18,8 +18,10 @@ exports.login = async (req, res) => {
     let userInDb = await User.findOne({ email: email });
     if (!userInDb) return res.status(400).json({ msg: "Email is not valid" });
     sendCookie(res, userInDb);
-  } catch (e) {
-    res.status(400).send("An unspecified error ocurred");
+  } catch (error) {
+    res
+    .status(401)
+    .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -38,11 +40,10 @@ exports.me = async (req, res) => {
       email: user.email,
       role: user.role,
     });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
     res
-      .status(500)
-      .json({ msg: "Server error- please contact your administrator" });
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -51,8 +52,9 @@ exports.logout = async (req, res) => {
     res.clearCookie(process.env.APPNAME || "Web app");
     res.status(200).json({ msg: "User logged out sucesfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Server error" });
+    res
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -90,9 +92,10 @@ exports.edit = async (req, res) => {
       password: hashedPassword,
     });
     sendCookie(res, { _id: id, name, email });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ msg: "Server error" });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -113,8 +116,9 @@ exports.delete = async (req, res) => {
     await User.findByIdAndRemove(id);
     res.clearCookie(appName);
     res.json({ msg: `Deleted the specified user` });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ msg: "Server error" });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };

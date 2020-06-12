@@ -11,31 +11,17 @@ exports.policiesByUsername = async (req, res) => {
   const name = req.body.name.trim();
   if (!name) return res.status(400).json({ msg: "Invalid query arguments" });
   try {
-    switch (req.body.token.role) {
-      case "admin":
-        const client = await Clients.getByName(name);
-        if (!client)
-          return res.status(400).json({ msg: "No such user in database" });
-        const policies = await Policies.getUserPolicies(client.id);
-        !!policies
-          ? res.status(200).json(policies)
-          : res
-              .status(400)
-              .json({ msg: "This user has no policies to his name" });
-        break;
-      default:
-        return res
-          .status(401)
-          .json({
-            msg:
-              "Your account does not have permission to access this information",
-          });
-    }
-  } catch (e) {
-    console.error(e);
+    const client = await Clients.getByName(name);
+    if (!client)
+      return res.status(400).json({ msg: "No such user in database" });
+    const policies = await Policies.getUserPolicies(client.id);
+    !!policies
+      ? res.status(200).json(policies)
+      : res.status(400).json({ msg: "This user has no policies to his name" });
+  } catch (error) {
     res
-      .status(500)
-      .json({ msg: "Server error- please contact your administrator" });
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
@@ -44,35 +30,21 @@ exports.getPolicyOwner = async (req, res) => {
   if (!policyId)
     return res.status(400).json({ msg: "Invalid query arguments" });
   try {
-    switch (req.body.token.role) {
-      case "admin":
-        const policy = await Policies.getPolicy(policyId);
-        if (!policy)
-          return res
-            .status(400)
-            .json({
-              msg: "No such policy in database, please check the provided ID",
-            });
-        const client = await Clients.getById(policy.clientId);
-        !!client
-          ? res.status(200).json(client)
-          : res
-              .status(400)
-              .json({ msg: "Could not find the client linked to this policy" });
-        break;
-      default:
-        return res
-          .status(401)
-          .json({
-            msg:
-              "Your account does not have permission to access this information",
-          });
-    }
-  } catch (e) {
-    console.error(e);
+    const policy = await Policies.getPolicy(policyId);
+    if (!policy)
+      return res.status(400).json({
+        msg: "No such policy in database, please check the provided ID",
+      });
+    const client = await Clients.getById(policy.clientId);
+    !!client
+      ? res.status(200).json(client)
+      : res
+          .status(400)
+          .json({ msg: "Could not find the client linked to this policy" });
+  } catch (error) {
     res
-      .status(500)
-      .json({ msg: "Server error- please contact your administrator" });
+      .status(401)
+      .json({ msg: "Server error- please contact your administrator", error });
   }
 };
 
