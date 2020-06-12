@@ -8,8 +8,8 @@ appName += process.env.APPNAME;
 
 exports.getById = async (req, res) => {
   const { id } = req.body;
+  console.log(req.body)
   try {
-    console.log("hola")
     switch (req.body.token.role) {
       case "user":
       case "admin":
@@ -17,6 +17,7 @@ exports.getById = async (req, res) => {
         !!client
         ? res.status(200).json(client)
         : res.status(400).json({msg: "No such user in database"});
+        break;
       default:
         return res
           .status(401)

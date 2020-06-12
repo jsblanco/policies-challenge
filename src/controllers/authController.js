@@ -7,18 +7,16 @@ const sendCookie = require("./../helpers/sendCookie");
 let appName = "App-";
 appName += process.env.APPNAME;
 
-
 exports.login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   const email = req.body.email.toLowerCase();
-  console.log("hola")
+  console.log("hola");
   try {
-    let userInDb = await User.findOne({email: email});
-    if (!userInDb)
-      return res.status(400).json({ msg: "Email is not valid" });
+    let userInDb = await User.findOne({ email: email });
+    if (!userInDb) return res.status(400).json({ msg: "Email is not valid" });
     sendCookie(res, userInDb);
   } catch (e) {
     res.status(400).send("An unspecified error ocurred");
@@ -31,14 +29,14 @@ exports.me = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const user = await User.findOne({email: req.body.token.email}).select(
+    const user = await User.findOne({ email: req.body.token.email }).select(
       "-password"
     );
     sendCookie(res, {
       id: user._id,
       username: user.username,
       email: user.email,
-      role: user.role
+      role: user.role,
     });
   } catch (e) {
     console.error(e);
