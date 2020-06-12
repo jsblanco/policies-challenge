@@ -5,7 +5,7 @@ const router = express.Router();
 const clientController = require("./../controllers/clientController");
 const auth = require("./../middleware/auth");
 const checkError = require("./../helpers/checkUser");
-// router.post("/", authController.login);
+router.post("/", clientController.getById);
 // router.get("/", auth, authController.me);
 // router.put("/", checkError(), auth, authController.edit);
 // router.delete("/", auth, authController.delete);
