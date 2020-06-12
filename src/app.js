@@ -14,4 +14,6 @@ db_config_1.connectDB();
 app.use(cookieparser());
 app.use("/api/signup", require("./routes/signup"));
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/policies", require("./routes/policies"));
+app.use("/api/clients", require("./routes/clients"));
 module.exports = app;

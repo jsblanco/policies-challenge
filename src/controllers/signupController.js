@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ msg: `Clientsname ${name} is already in the database` });
+        .json({ msg: `Client name ${name} is already in the database` });
     }
     user = { name, email, password };
     user.password = bcryptjs.hashSync(password, 10);
