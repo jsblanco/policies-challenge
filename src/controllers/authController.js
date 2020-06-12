@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Clients = require("../models/clientsDb");
+const User = require("../models/userDb");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const sendCookie = require("./../helpers/sendCookie");
@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
   }
   const email = req.body.email.toLowerCase();
   try {
-    let userInDb = await Clients.getByEmail(email);
+    let userInDb = await User.getByEmail(email);
     if (!userInDb)
       return res.status(400).json({ msg: "Email is not valid" });
     sendCookie(res, userInDb);
@@ -29,13 +29,14 @@ exports.me = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const user = await Clients.getByEmail(req.body.token.email).select(
+    const user = await User.getByEmail(req.body.token.email).select(
       "-password"
     );
     sendCookie(res, {
       id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role
     });
   } catch (e) {
     console.error(e);
@@ -48,7 +49,7 @@ exports.me = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     res.clearCookie(process.env.APPNAME || "Web app");
-    res.status(200).json({ msg: "Clients logged out sucesfully" });
+    res.status(200).json({ msg: "User logged out sucesfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Server error" });
@@ -65,7 +66,7 @@ exports.edit = async (req, res) => {
   const { id } = req.body.token;
   try {
     if (email !== req.body.token.email) {
-      const checkEmail = await Clients.findOne({ email });
+      const checkEmail = await User.findOne({ email });
       if (checkEmail)
         return res
           .status(400)
@@ -74,7 +75,7 @@ exports.edit = async (req, res) => {
     if (!originalPassword) {
       originalPassword = password;
     }
-    const userData = await Clients.findById(id);
+    const userData = await User.findById(id);
     const checkPassword = await bcryptjs.compare(
       originalPassword,
       userData.password
@@ -83,7 +84,7 @@ exports.edit = async (req, res) => {
       return res.status(400).json({ msg: "Incorrect password" });
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
-    await Clients.findByIdAndUpdate(id, {
+    await User.findByIdAndUpdate(id, {
       name,
       email,
       password: hashedPassword,
@@ -98,7 +99,7 @@ exports.edit = async (req, res) => {
 exports.delete = async (req, res) => {
   const { id } = req.body.token;
   try {
-    const userData = await Clients.findById(id);
+    const userData = await User.findById(id);
     if (!req.body.password)
       return res
         .status(400)
@@ -109,7 +110,7 @@ exports.delete = async (req, res) => {
     );
     if (!checkPassword)
       return res.status(400).json({ msg: "Password provided is incorrect" });
-    await Clients.findByIdAndRemove(id);
+    await User.findByIdAndRemove(id);
     res.clearCookie(appName);
     res.json({ msg: `Deleted the specified user` });
   } catch (e) {

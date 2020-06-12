@@ -18,6 +18,7 @@ class Clients {
     }
   };
 
+
   getByName(name) {
     return this.clients.find(
       (client) => client.name.toLowerCase() === name.toLowerCase()
