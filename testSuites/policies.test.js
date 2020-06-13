@@ -14,7 +14,6 @@ const setCookie = (user, role) => {
 
 beforeAll(async (done) => {
   await Policies.populateDatabase();
-  await Clients.populateDatabase();
   done();
 });
 
