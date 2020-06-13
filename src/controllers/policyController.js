@@ -4,12 +4,12 @@ const Clients = require("../models/clientsDb");
 const Policies = require("../models/policiesDb");
 
 exports.policiesByUsername = async (req, res) => {
+  if (!req.body.name || !req.body.name.trim()) return res.status(400).json({ msg: "Invalid query arguments" });
   const name = req.body.name.trim();
-  if (!name) return res.status(400).json({ msg: "Invalid query arguments" });
   try {
     const client = await Clients.getByName(name);
     if (!client)
-      return res.status(400).json({ msg: "No such user in database" });
+      return res.status(404).json({ msg: "No such user in database" });
     const policies = await Policies.getUserPolicies(client.id);
     !!policies
       ? res.status(200).json(policies)
@@ -22,9 +22,8 @@ exports.policiesByUsername = async (req, res) => {
 };
 
 exports.getPolicyOwner = async (req, res) => {
+  if (!req.body.id || !req.body.id.trim()) return res.status(400).json({ msg: "Invalid query arguments" });
   const policyId = req.body.id.trim();
-  if (!policyId)
-    return res.status(400).json({ msg: "Invalid query arguments" });
   try {
     const policy = await Policies.getPolicy(policyId);
     if (!policy)

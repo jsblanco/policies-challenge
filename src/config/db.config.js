@@ -10,7 +10,6 @@ exports.connectDB = async () => {
             useFindAndModify: false,
             useCreateIndex: true
         });
-        console.log(`Connected to database`);
     }
     catch (e) {
         console.log(`Error connecting to database: ${e}`);
