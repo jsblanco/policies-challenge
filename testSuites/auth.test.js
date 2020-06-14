@@ -34,7 +34,7 @@ describe("Authentification routes test", () => {
     it("Test user login successfully", async () => {
       const res = await request
         .post("/api/auth")
-        .send({ password: "12345678", email: "test@test.com" });
+        .send({ password: "12345678", email: "test@email.com" });
       expect(res.statusCode).toBe(200);
     });
   });

@@ -7,6 +7,7 @@ const auth = require("./../middleware/auth");
 const checkError = require("./../helpers/checkUser");
 router.post("/", authController.login);
 router.get("/", auth, authController.me);
+router.get("/logout", auth, authController.logout);
 router.put("/", checkError(), auth, authController.edit);
 router.delete("/", auth, authController.delete);
 module.exports = router;

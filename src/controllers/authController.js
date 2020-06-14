@@ -52,7 +52,7 @@ exports.me = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie(process.env.APPNAME || "Web app");
+    res.clearCookie(appName || "Web app");
     res.status(200).json({ msg: "User logged out sucesfully" });
   } catch (error) {
     res
